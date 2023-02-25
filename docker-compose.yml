@@ -1,20 +1,21 @@
 version: "3.8"
 services:
-  mongodb:
-    image : mongo
-    container_name: mongodb
+  postgres:
+    image: postgres:12.2
+    container_name: cm_postgres
+    restart: always
     environment:
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - /home/barry/mongodb/database:/data/db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
     ports:
-      - 27017:27017
-    restart: unless-
+      - 5432:5432
+    volumes:
+      - ./database/postgres:/var/lib/postgresql/data
     
   express:
     image: node:18.13.0
-    container_name: express
+    container_name: cm_express
     restart: always
     ports:
       - 5000:5000
@@ -24,12 +25,14 @@ services:
       - ./api/package.json:/usr/src/app/package.json
       - ./api/package-lock.json:/usr/src/app/package-lock.json
       - ./api/node_modules:/usr/src/app/node_modules
+      - ./api/prisma:/usr/src/app/prisma
+      - ./api/.docker.env:/usr/src/app/.env
     working_dir: /usr/src/app
     command: bash -c "npm install && npm run dev"
 
   react:
     image: node:18.13.0
-    container_name: react
+    container_name: cm_react
     restart: always
     ports:
       - 3000:3000
