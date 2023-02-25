@@ -57,7 +57,9 @@ async function seedCounters() {
                 connect: {
                     id: 1
                 }
-            }
+            },
+            dateCreated: new Date(),
+            dateUpdated: new Date()
         }
     });
 
@@ -70,7 +72,9 @@ async function seedCounters() {
                 connect: {
                     id: 2
                 }
-            }
+            },
+            dateCreated: new Date(),
+            dateUpdated: new Date()
         }
     });
 }

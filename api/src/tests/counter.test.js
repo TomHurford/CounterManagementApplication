@@ -343,32 +343,297 @@ describe('POST /counter/create', () => {
     })
 })
 
-// Test the delete counter route
-describe('POST /counter/delete', () => {
-    test('It should delete the counter', async () => {
-        // The counter with id 1 belongs to the user with id 1
+// Test the get all counters route
+describe('GET /counter/all', () => {
+    test('It should get all the counters', async () => {
         const res = await request(app)
-            .post('/counter/delete')
+            .get('/counter/all')
+            .set('Authorization', token)
+            .expect(200)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('counters');
+    })
+
+    test('It should not get all the counters if the token is not provided', async () => {
+        const res = await request(app)
+            .get('/counter/all')
+            .expect(401)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+
+    test('It should not get all the counters if the token is invalid', async () => {
+        const res = await request(app)
+            .get('/counter/all')
+            .set('Authorization', 'test')
+            .expect(401)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+})
+
+// Test the increment alternative route
+describe('POST /counter/incrementAlternative', () => {
+    test('It should increment the counter', async () => {
+        const res = await request(app)
+            .post('/counter/incrementAlternative')
             .set('Authorization', token)
             .send({
-                counterId: 1
+                counterId: 1,
+                incrementAmount: 5
             })
             .expect(200)
             .expect('Content-Type', /json/);
         expect(res.body).toHaveProperty('message');
+    })
 
-        // Recreate the counter
+    test('It should not increment the counter if the counter does not belong to the user', async () => {
+        const res = await request(app)
+            .post('/counter/incrementAlternative')
+            .set('Authorization', token)
+            .send({
+                counterId: 2,
+                incrementAmount: 5
+            })
+            .expect(403)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+
+    test('It should not increment the counter if the counter id is not provided', async () => {
+        const res = await request(app)
+            .post('/counter/incrementAlternative')
+            .set('Authorization', token)
+            .send({
+                incrementAmount: 5
+            })
+            .expect(400)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+
+    test('It should not increment the counter if the increment Amount is not provided', async () => {
+        const res = await request(app)
+            .post('/counter/incrementAlternative')
+            .set('Authorization', token)
+            .send({
+                counterId: 1
+            })
+            .expect(400)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+
+    test('It should not increment the counter if the counter id is not a number', async () => {
+        const res = await request(app)
+            .post('/counter/incrementAlternative')
+            .set('Authorization', token)
+            .send({
+                counterId: 'test',
+                incrementAmount: 5
+            })
+            .expect(400)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+
+    test('It should not increment the counter if the increment Amount is not a number', async () => {
+        const res = await request(app)
+            .post('/counter/incrementAlternative')
+            .set('Authorization', token)
+            .send({
+                counterId: 1,
+                incrementAmount: 'test'
+            })
+            .expect(400)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+
+    test('It should not increment the counter if the increment Amount is a negative number', async () => {
+        const res = await request(app)
+            .post('/counter/incrementAlternative')
+            .set('Authorization', token)
+            .send({
+                counterId: 1,
+                incrementAmount: -1
+            })
+            .expect(400)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+
+    test('It should not increment the counter if the token is not provided', async () => {
+        const res = await request(app)
+            .post('/counter/incrementAlternative')
+            .send({
+                counterId: 1,
+                incrementAmount: 5
+            })
+            .expect(401)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+
+    test('It should not increment the counter if the token is invalid', async () => {
+        const res = await request(app)
+            .post('/counter/incrementAlternative')
+            .set('Authorization', 'test')
+            .send({
+                counterId: 1,
+                incrementAmount: 5
+            })
+            .expect(401)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+})
+
+// Test the decrement alternative route
+describe('POST /counter/decrementAlternative', () => {
+    test('It should decrement the counter', async () => {
+        const res = await request(app)
+            .post('/counter/decrementAlternative')
+            .set('Authorization', token)
+            .send({
+                counterId: 1,
+                decrementAmount: 5
+            })
+            .expect(200)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('message');
+    })
+
+    test('It should not decrement the counter if the counter does not belong to the user', async () => {
+        const res = await request(app)
+            .post('/counter/decrementAlternative')
+            .set('Authorization', token)
+            .send({
+                counterId: 2,
+                decrementAmount: 5
+            })
+            .expect(403)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+
+    test('It should not decrement the counter if the counter id is not provided', async () => {
+        const res = await request(app)
+            .post('/counter/decrementAlternative')
+            .set('Authorization', token)
+            .send({
+                decrementAmount: 5
+            })
+            .expect(400)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+
+    test('It should not decrement the counter if the decrement Amount is not provided', async () => {
+        const res = await request(app)
+            .post('/counter/decrementAlternative')
+            .set('Authorization', token)
+            .send({
+                counterId: 1
+            })
+            .expect(400)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+
+    test('It should not decrement the counter if the counter id is not a number', async () => {
+        const res = await request(app)
+            .post('/counter/decrementAlternative')
+            .set('Authorization', token)
+            .send({
+                counterId: 'test',
+                decrementAmount: 5
+            })
+            .expect(400)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+
+    test('It should not decrement the counter if the decrement Amount is not a number', async () => {
+        const res = await request(app)
+            .post('/counter/decrementAlternative')
+            .set('Authorization', token)
+            .send({
+                counterId: 1,
+                decrementAmount: 'test'
+            })
+            .expect(400)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+
+    test('It should not decrement the counter if the decrement Amount is a negative number', async () => {
+        const res = await request(app)
+            .post('/counter/decrementAlternative')
+            .set('Authorization', token)
+            .send({
+                counterId: 1,
+                decrementAmount: -1
+            })
+            .expect(400)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+
+    test('It should not decrement the counter if the token is not provided', async () => {
+        const res = await request(app)
+            .post('/counter/decrementAlternative')
+            .send({
+                counterId: 1,
+                decrementAmount: 5
+            })
+            .expect(401)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+
+    test('It should not decrement the counter if the token is invalid', async () => {
+        const res = await request(app)
+            .post('/counter/decrementAlternative')
+            .set('Authorization', 'test')
+            .send({
+                counterId: 1,
+                decrementAmount: 5
+            })
+            .expect(401)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('error');
+    })
+})
+
+// Test the delete counter route
+describe('POST /counter/delete', () => {
+    test('It should delete the counter', async () => {
+        // The counter with id 1 belongs to the user with id 1
+        // Create a counter
         const counter = await prisma.prisma.counter.create({
             data: {
-                counterName: 'test',
+                counterName: 'toBeDeleted',
                 counterValue: 0,
                 userId: {
                     connect: {
                         id: 1
                     }
-                }
+                },
+                dateCreated: new Date(),
+                dateUpdated: new Date()
             }
         })
+
+        const res = await request(app)
+            .post('/counter/delete')
+            .set('Authorization', token)
+            .send({
+                counterId: counter.id
+            })
+            .expect(200)
+            .expect('Content-Type', /json/);
+        expect(res.body).toHaveProperty('message');
     })
 
     test('It should not delete the counter if the counter does not belong to the user', async () => {
@@ -437,35 +702,6 @@ describe('POST /counter/delete', () => {
                 counterId: 100
             })
             .expect(404)
-            .expect('Content-Type', /json/);
-        expect(res.body).toHaveProperty('error');
-    })
-})
-
-// Test the get all counters route
-describe('GET /counter/all', () => {
-    test('It should get all the counters', async () => {
-        const res = await request(app)
-            .get('/counter/all')
-            .set('Authorization', token)
-            .expect(200)
-            .expect('Content-Type', /json/);
-        expect(res.body).toHaveProperty('counters');
-    })
-
-    test('It should not get all the counters if the token is not provided', async () => {
-        const res = await request(app)
-            .get('/counter/all')
-            .expect(401)
-            .expect('Content-Type', /json/);
-        expect(res.body).toHaveProperty('error');
-    })
-
-    test('It should not get all the counters if the token is invalid', async () => {
-        const res = await request(app)
-            .get('/counter/all')
-            .set('Authorization', 'test')
-            .expect(401)
             .expect('Content-Type', /json/);
         expect(res.body).toHaveProperty('error');
     })

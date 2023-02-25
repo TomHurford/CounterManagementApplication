@@ -22,10 +22,12 @@ model User {
 }
 
 model Counter {
-  id           Int    @id @unique @default(autoincrement())
+  id           Int      @id @unique @default(autoincrement())
   counterName  String
   counterValue Int
-  userId       User   @relation(fields: [user], references: [id])
+  dateCreated  DateTime
+  dateUpdated  DateTime
+  userId       User     @relation(fields: [user], references: [id])
   user         Int
 }
 

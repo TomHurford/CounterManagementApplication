@@ -33,4 +33,14 @@ router.get('/all', (req, res) => {
     counterController.getAll(req, res);
 })
 
+// Increment alternative route
+router.post('/incrementAlternative', (req, res) => {
+    counterController.incrementAlternate(req, res);
+})
+
+// Decrement alternative route
+router.post('/decrementAlternative', (req, res) => {
+    counterController.decrementAlternate(req, res);
+})
+
 module.exports = router;

@@ -52,7 +52,8 @@ async function increment(req, res) {
             id: req.body.counterId
         },
         data: {
-            counterValue: counter.counterValue + 1
+            counterValue: counter.counterValue + 1,
+            dateUpdated: new Date()
         }
     });
 
@@ -66,7 +67,6 @@ async function increment(req, res) {
     // Return the updated counter
     return res.status(200).json(updatedCounter);
 }
-
 
 async function decrement(req, res) {
     let decoded = null;
@@ -117,7 +117,8 @@ async function decrement(req, res) {
             id: req.body.counterId
         },
         data: {
-            counterValue: counter.counterValue - 1
+            counterValue: counter.counterValue - 1,
+            dateUpdated: new Date()
         }
     });
 
@@ -181,7 +182,8 @@ async function reset(req, res) {
             id: req.body.counterId
         },
         data: {
-            counterValue: 0
+            counterValue: 0,
+            dateUpdated: new Date()
         }
     });
 
@@ -249,7 +251,9 @@ async function create(req, res) {
         data: {
             counterName: req.body.counterName,
             counterValue: 0,
-            user: decoded.user.id
+            user: decoded.user.id,
+            dateCreated: new Date(),
+            dateUpdated: new Date()
         }
     });
 
@@ -338,6 +342,131 @@ async function getAll(req, res) {
     return res.status(200).json({ counters });
 }
 
+async function incrementAlternate(req, res) {
+    let decoded = null;
+
+    try {
+        // Decode the JWT token
+        decoded = await jwt.verifyToken(req.headers.authorization);
+    } catch (err) {
+        // If the token is invalid, return an error
+        return res.status(401).json({ error: 'Invalid token' });
+    }
+
+    // Check that the user id is not null
+    if (!decoded.user.id) {
+        return res.status(401).json({ error: 'Invalid token' });
+    }
+
+    // Check that the request body contains a counterId
+    if (!req.body.counterId || !req.body.incrementAmount) {
+        return res.status(400).json({ error: 'Missing information' });
+    }
+
+    // Check that the incrementAmount is a positive number
+    if (isNaN(req.body.incrementAmount) || req.body.incrementAmount <= 0) {
+        return res.status(400).json({ error: 'incrementAmount must be a positive number' });
+    }
+
+    // Check that the counterId is a number
+    if (isNaN(req.body.counterId)) {
+        return res.status(400).json({ error: 'counterId must be a number' });
+    }
+
+    const counter = await prisma.prisma.counter.findUnique({
+        where: {
+            id: req.body.counterId,
+        }
+    });
+
+    // If the counter doesn't exist, return an error
+    if (!counter) {
+        return res.status(404).json({ error: 'Counter not found' });
+    }
+
+    // Check that the user is the owner of the counter
+    if (counter.user !== decoded.user.id) {
+        return res.status(403).json({ error: 'Forbidden' });
+    }
+
+    // Increment the counter
+    await prisma.prisma.counter.update({
+        where: {
+            id: req.body.counterId
+        },
+        data: {
+            counterValue: counter.counterValue + req.body.incrementAmount,
+            dateUpdated: new Date()
+        }
+    });
+
+    // Return a success message
+    return res.status(200).json({ message: 'Counter incremented' });
+}
+
+async function decrementAlternate(req, res) {
+    let decoded = null;
+
+    try {
+        // Decode the JWT token
+        decoded = await jwt.verifyToken(req.headers.authorization);
+    } catch (err) {
+        // If the token is invalid, return an error
+        return res.status(401).json({ error: 'Invalid token' });
+    }
+
+    // Check that the user id is not null
+    if (!decoded.user.id) {
+        return res.status(401).json({ error: 'Invalid token' });
+    }
+
+    // Check that the request body contains a counterId
+    if (!req.body.counterId || !req.body.decrementAmount) {
+        return res.status(400).json({ error: 'Missing information' });
+    }
+
+    // Check that the decrementAmount is a positive number
+    if (isNaN(req.body.decrementAmount) || req.body.decrementAmount <= 0) {
+        return res.status(400).json({ error: 'decrementAmount must be a positive number' });
+    }
+
+    // Check that the counterId is a number
+    if (isNaN(req.body.counterId)) {
+        return res.status(400).json({ error: 'counterId must be a number' });
+    }
+
+    const counter = await prisma.prisma.counter.findUnique({
+        where: {
+            id: req.body.counterId,
+        }
+    });
+
+    // If the counter doesn't exist, return an error
+    if (!counter) {
+        return res.status(404).json({ error: 'Counter not found' });
+    }
+
+    // Check that the user is the owner of the counter
+    if (counter.user !== decoded.user.id) {
+        return res.status(403).json({ error: 'Forbidden' });
+    }
+
+    // Decrement the counter
+    await prisma.prisma.counter.update({
+        where: {
+            id: req.body.counterId
+        },
+        data: {
+            counterValue: counter.counterValue - req.body.decrementAmount,
+            dateUpdated: new Date()
+        }
+    });
+
+    // Return a success message
+    return res.status(200).json({ message: 'Counter decremented' });
+}
+
+
 
 module.exports = {
     increment,
@@ -345,5 +474,7 @@ module.exports = {
     reset,
     create,
     deleteCounter,
-    getAll
+    getAll,
+    incrementAlternate,
+    decrementAlternate
 };
