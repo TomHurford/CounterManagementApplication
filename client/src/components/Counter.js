@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Button } from "@mui/material";
+import "../styles/counter.css";
 
 function Counter(props) {
   const [count, setCount] = useState(props.value);
+  const [dateUpdated, setDateUpdated] = useState(props.dateUpdated);
   const token = localStorage.getItem("token");
 
   const handleIncrement = () => {
@@ -22,6 +25,7 @@ function Counter(props) {
       .catch((error) => {
         console.error(error);
       });
+    setDateUpdated(new Date().toLocaleString());
   };
 
   const handleDecrement = () => {
@@ -38,6 +42,7 @@ function Counter(props) {
       .catch((error) => {
         console.error(error);
       });
+    setDateUpdated(new Date().toLocaleString());
   };
 
   const handleDelete = () => {
@@ -78,16 +83,21 @@ function Counter(props) {
       .catch((error) => {
         console.error(error);
       });
+    setDateUpdated(new Date().toLocaleString());
   };
 
   return (
-    <div>
+    <div className="counter">
       <h3>{props.name}</h3>
       <p>Count: {count}</p>
-      <button onClick={handleIncrement}>+</button>
-      <button onClick={handleDecrement}>-</button>
-      <button onClick={handleReset}>Reset</button>
-      <button onClick={handleDelete}>Delete</button>
+      <p className="date">Created: {props.dateCreated}</p>
+      <p className="date">Last Modified: {dateUpdated}</p>
+      <div className="counter-buttons">
+        <Button onClick={handleIncrement}>+</Button>
+        <Button onClick={handleDecrement}>-</Button>
+        <Button onClick={handleReset}>Reset</Button>
+        <Button onClick={handleDelete}>Delete</Button>
+      </div>
     </div>
   );
 }

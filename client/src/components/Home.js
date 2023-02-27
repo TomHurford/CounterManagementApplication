@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Counter from "./Counter";
 import axios from "axios";
+import { Button } from "@mui/material";
 
 function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -68,7 +69,14 @@ function Home() {
   };
 
   if (!isLoggedIn) {
-    return <p>Please log in to view this page.</p>;
+    return (
+      <div>
+        <p>Please log in to view this page.</p>
+        <Button onClick={() => window.location.replace("/login")}>
+          LOGIN PAGE
+        </Button>
+      </div>
+    );
   }
 
   if (isLoading) {
@@ -77,7 +85,8 @@ function Home() {
 
   return (
     <div>
-      <button onClick={() => setShowForm(true)}>Add Counter</button>
+      <Button onClick={() => setShowForm(true)}>Add Counter</Button>
+      <Button onClick={handleLogout}>Logout</Button>
       {showForm && (
         <form onSubmit={handleSubmit}>
           <input
@@ -85,7 +94,7 @@ function Home() {
             value={counterName}
             onChange={(event) => setCounterName(event.target.value)}
           />
-          <button type="submit">Submit</button>
+          <Button type="submit">Submit</Button>
         </form>
       )}
       {counters && counters.length > 0 ? (
@@ -95,13 +104,13 @@ function Home() {
             id={counter.id}
             value={counter.counterValue}
             name={counter.counterName}
+            dateCreated={counter.dateCreated}
+            dateUpdated={counter.dateUpdated}
           />
         ))
       ) : (
         <p>You have no cards yet.</p>
       )}
-
-      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 }

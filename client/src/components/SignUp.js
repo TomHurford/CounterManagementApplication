@@ -1,5 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
+import { Button } from "@mui/material";
+import "../styles/submit.css";
 
 function SignUp() {
   const [email, setEmail] = useState("");
@@ -32,62 +34,69 @@ function SignUp() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Email:
-        <input
-          type="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-        />
-      </label>
-      <br />
+    <div className="submit-form">
+      <form onSubmit={handleSubmit}>
+        <label>
+          Email:
+          <input
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+        </label>
+        <br />
 
-      <label>
-        Forename:
-        <input
-          type="text"
-          value={forename}
-          onChange={(event) => setForename(event.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Surname:
-        <input
-          type="text"
-          value={surname}
-          onChange={(event) => setSurname(event.target.value)}
-        />
-      </label>
-      <label>
-        Password:
-        <input
-          type="password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Confirm Password:
-        <input
-          type="password"
-          value={confirmPassword}
-          onChange={(event) => setConfirmPassword(event.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Phone Number:
-        <input
-          type="tel"
-          value={phoneNumber}
-          onChange={(event) => setPhoneNumber(event.target.value)}
-        />
-      </label>
-      <button type="submit">Sign Up</button>
-    </form>
+        <label>
+          Forename:
+          <input
+            type="text"
+            value={forename}
+            onChange={(event) => setForename(event.target.value)}
+          />
+        </label>
+        <br />
+        <label>
+          Surname:
+          <input
+            type="text"
+            value={surname}
+            onChange={(event) => setSurname(event.target.value)}
+          />
+        </label>
+        <br />
+        <label>
+          Password:
+          <input
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+        </label>
+        <br />
+        <label>
+          Confirm Password:
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.target.value)}
+          />
+        </label>
+        <br />
+        <label>
+          Phone Number:
+          <input
+            type="tel"
+            value={phoneNumber}
+            onChange={(event) => setPhoneNumber(event.target.value)}
+          />
+        </label>
+        <br />
+        <Button type="submit">Sign Up</Button>
+        <Button type="Button" onClick={() => window.location.replace("/login")}>
+          Login
+        </Button>
+      </form>
+    </div>
   );
 }
 

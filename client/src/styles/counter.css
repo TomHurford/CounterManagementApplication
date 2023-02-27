@@ -1,0 +1,50 @@
+.counter {
+  /* I want the card to have a radius and a border in neumorphism styling */
+  border-radius: 21px;
+  background: linear-gradient(145deg, #24282f, #2b2f38);
+  box-shadow: 6px 6px 21px #121417, -6px -6px 21px #3e4451;
+  /* I want the card to have a width of 300px */
+  width: 300px;
+  /* I want the card to have a height of 300px */
+  height: 270px;
+  /* I want the card to have a margin of 10px */
+  margin: 50px;
+  /* I want the card to have a padding of 10px */
+  padding: 10px;
+  /* I want the card to have a text-align of center */
+  text-align: center;
+  /* I want the card to have a font-size of 20px */
+  font-size: 20px;
+  /* I want the card to have a font-weight of bold */
+  font-weight: bold;
+  /* I want the card to have a line-height of 1.5 */
+  line-height: 1.5;
+  /* I want the card to have a display of flex */
+  display: flex;
+  /* I want the card to have a flex-direction of column */
+  flex-direction: column;
+  /* I want the card to have a justify-content of center */
+  justify-content: center;
+  /* I want the card to have a align-items of center */
+  align-items: center;
+  /* Text should be black */
+  color: #ffffff;
+}
+
+.counter-buttons {
+  /* I want the buttons to have a display of flex */
+  display: flex;
+  /* I want the buttons to have a justify-content of space-between */
+  justify-content: space-between;
+  /* I want the buttons to have a width of 100% */
+  width: 100%;
+}
+
+.date {
+  /* I want the date to have a font-size of 12px */
+  font-size: 12px;
+  /* I want the date to have a font-weight of normal */
+  font-weight: normal;
+  /* I want the date to have a color of #ffffff */
+  color: #ffffff;
+}

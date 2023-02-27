@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { Button } from "@mui/material";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -40,12 +41,12 @@ function Login() {
         />
       </label>
       <br />
-      <button type="submit">Login</button>
+      <Button type="submit">Login</Button>
 
-      {/* Add a button to send the user to the sign up page */}
-      <button type="button" onClick={() => window.location.replace("/signup")}>
+      {/* Add a Button to send the user to the sign up page */}
+      <Button type="Button" onClick={() => window.location.replace("/signup")}>
         Sign Up
-      </button>
+      </Button>
     </form>
   );
 }

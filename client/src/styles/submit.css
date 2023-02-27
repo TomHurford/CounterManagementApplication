@@ -1,0 +1,12 @@
+.submit-form {
+  /* Items should be vertically stacked */
+  display: flex;
+  flex-direction: column;
+  /* I want the card to have a border with rounded edges  */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  /* I want the card to have a shadow */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  /* I want the card to have internal padding */
+  padding: 10px;
+}
