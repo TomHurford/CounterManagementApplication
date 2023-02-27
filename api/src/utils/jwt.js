@@ -12,7 +12,15 @@ async function generateToken(user) {
 // This function will be used to verify a JWT token
 async function verifyToken(token) {
     // The token will be verified using the secret key if the token is malformed, expired or invalid, an error will be thrown
-    return jwt.verify(token, process.env.JWT_SECRET);
+    // Separate the 'Bearer' part from the token
+    const tokenParts = token.split(' ');
+    if (tokenParts.length !== 2) {
+        throw new Error('Token is malformed');
+    }
+    // Get the token from the request headers
+    const tokenValue = tokenParts[1];
+    // Verify the token
+    return jwt.verify(tokenValue, process.env.JWT_SECRET);
 }
 
 module.exports = {

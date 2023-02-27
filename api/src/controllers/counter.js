@@ -317,6 +317,7 @@ async function deleteCounter(req, res) {
 async function getAll(req, res) {
     let decoded = null;
 
+
     try {
         // Decode the JWT token
         decoded = await jwt.verifyToken(req.headers.authorization);

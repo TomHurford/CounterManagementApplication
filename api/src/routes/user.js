@@ -19,4 +19,8 @@ router.post('/logout', (req, res) => {
     userController.logout(req, res);
 });
 
+router.post('/verify', (req, res) => {
+    userController.verify(req, res);
+});
+
 module.exports = router;

@@ -27,6 +27,19 @@ async function signup(req, res) {
         return res.status(400).json({ error: 'Email already exists' });
     }
 
+    // If the users phone number is not empty, check if it already exists
+    if (phoneNumber) {
+        const existingPhoneNumber = await prisma.prisma.user.findUnique({
+            where: {
+                phoneNumber: phoneNumber
+            }
+        });
+        if (existingPhoneNumber) {
+            return res.status(400).json({ error: 'Phone number already exists' });
+        }
+    }
+
+
     // If the user's email doesn't exist, create a new user
     const newUser = await prisma.prisma.user.create({
         data: {
@@ -103,8 +116,29 @@ async function logout(req, res) {
     return res.status(200).json({ message: 'Successfully logged out' });
 }
 
+async function verify(req, res) {
+    // Check that the user's token is not empty
+    if (!req.headers.authorization) {
+        return res.status(400).json({ error: 'Token is required' });
+    }
+
+    // Get the user's token from the request headers
+    const token = req.headers.authorization.split(' ')[1];
+
+    // Verify the token
+    try {
+        await jwt.verifyToken(token);
+    } catch (error) {
+        return res.status(400).json({ error: 'Invalid token' });
+    }
+
+    // If the token is valid, return a success message
+    return res.status(200).json({ message: 'Token is valid' });
+}
+
 module.exports = {
     signup,
     login,
-    logout
+    logout,
+    verify
 };
