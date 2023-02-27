@@ -1,9 +1,8 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import '../styles/App.css';
-import Login from './Login';
-import SignUp from './SignUp';
-import Home from './Home';
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "../styles/App.css";
+import Login from "./Login";
+import SignUp from "./SignUp";
+import Home from "./Home";
 
 function App() {
   return (
