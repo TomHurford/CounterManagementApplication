@@ -10,4 +10,4 @@ $ docker compose up
 
 ## Issues
 
-Occasionally when you add a counter it wont add but i dont know why
+Bug when adding counter, works after 2nd try
